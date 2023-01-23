@@ -2,6 +2,15 @@
 
 A CLI for managing Groggy game assets.
 
+## Development
+
+### Running the CLI in development
+
+```console
+npm run build
+./bin/cli.js [arguments]
+```
+
 ## FAQ
 
 ### What's the Groggy game engine?

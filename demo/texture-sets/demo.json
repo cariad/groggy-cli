@@ -1,0 +1,10 @@
+{
+  "grid": 16,
+  "textures": {
+    "Wall": [0, 0],
+    "WallTop": [0, 1],
+    "FloorLeft": [0, 2],
+    "Floor": [0, 3],
+    "FloorRight": [0, 4]
+  }
+}

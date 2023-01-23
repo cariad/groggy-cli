@@ -10,5 +10,10 @@
     "strict": true,
     "target": "ES2020"
   },
-  "include": ["*.cjs", "src/**/*"]
+  "include": [
+    ".eslintrc.cjs",
+    "babel.config.cjs",
+    "jest.config.cjs",
+    "src/**/*"
+  ]
 }
