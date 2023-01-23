@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@3.2.4
 
 jobs:
   test:
@@ -14,9 +17,11 @@ jobs:
             - v1-
 
       - run: npm install
-      - run: npm lint
-      - run: npm test
+      - run: npm run lint
+      - run: npm run test
       - run: npm run build
+
+      - codecov/upload
 
       - save_cache:
           paths:
