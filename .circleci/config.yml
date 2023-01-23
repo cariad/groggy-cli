@@ -44,6 +44,7 @@ jobs:
     working_directory: ~/project
 
 workflows:
+  version: 2
   default:
     jobs:
       - test:
