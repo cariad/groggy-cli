@@ -4,7 +4,9 @@
     "cimg",
     "codecov",
     "genversion",
+    "linebreak",
     "npmjs",
-    "npmrc"
+    "npmrc",
+    "vars"
   ]
 }

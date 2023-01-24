@@ -1,40 +1,40 @@
-import fs from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
-import FilenameCallback from '../types/filename-callback.js';
+import IProject from '../interfaces/project.js';
 import TextureSet from './texture-set.js';
 import TextureSetCallback from '../types/texture-set-callback.js';
 
-export default class ProjectModel {
-  public readonly projectPath: string;
+export default class Project implements IProject {
+  public readonly path: string;
+
+  private static readonly TEXTURE_SETS_DIR = 'texture-sets';
 
   constructor(projectPath: string) {
-    this.projectPath = path.resolve(projectPath);
+    this.path = path.resolve(projectPath);
   }
 
-  public static async forEachFile(
-    dir: string,
-    cb: FilenameCallback,
-  ): Promise<void> {
-    await fs.readdir(dir).then((filenames) => {
-      filenames.forEach((filename) => cb(path.join(dir, filename)));
-    });
+  public get textureSetsPath(): string {
+    return path.join(this.path, Project.TEXTURE_SETS_DIR);
   }
 
-  public static async forEachJson(
-    dir: string,
-    cb: FilenameCallback,
-  ): Promise<void> {
-    await ProjectModel.forEachFile(dir, (file) => {
-      if (file.toLowerCase().endsWith('.json')) cb(file);
-    });
+  public getAllFiles(subdirectory: string): string[] {
+    const dir = path.join(this.path, subdirectory);
+    return fs.readdirSync(dir);
   }
 
-  public async forEachTextureSet(cb: TextureSetCallback): Promise<void> {
-    const setsPath = path.join(this.projectPath, 'texture-sets');
+  public getAllJsonNames(subdirectory: string): string[] {
+    return this.getAllFiles(subdirectory)
+      .filter((f) => f.toLowerCase().endsWith('.json'))
+      .map((f) => f.substring(0, f.length - '.json'.length));
+  }
 
-    await ProjectModel.forEachJson(setsPath, (file) => {
-      cb(TextureSet.load(file));
+  public forEachTextureSet(cb: TextureSetCallback): void {
+    const names = this.getAllJsonNames(Project.TEXTURE_SETS_DIR);
+
+    names.forEach((name) => {
+      const textureSet = TextureSet.load(name, this);
+      cb(textureSet);
     });
   }
 }

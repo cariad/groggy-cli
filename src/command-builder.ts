@@ -1,14 +1,16 @@
+import CanvasBuilder from './canvas-builder.js';
+import Project from './models/project.js';
 import RenderTextureSetsCommand from './commands/render-texture-sets.js';
-import ProjectModel from './models/project.js';
 
 export default class CommandBuilder {
-  private readonly project: ProjectModel;
+  private readonly project: Project;
 
   constructor(projectPath: string) {
-    this.project = new ProjectModel(projectPath);
+    this.project = new Project(projectPath);
   }
 
   public renderTextureSets(): RenderTextureSetsCommand {
-    return new RenderTextureSetsCommand(this.project);
+    const makeCanvasBuilder = (w: number, h: number) => new CanvasBuilder(w, h);
+    return new RenderTextureSetsCommand(this.project, makeCanvasBuilder);
   }
 }

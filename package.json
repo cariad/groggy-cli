@@ -1,8 +1,6 @@
 {
   "author": "Cariad Eccleston <cariad@cariad.earth>",
-  "bin": {
-    "groggy": "bin/cli.js"
-  },
+  "bin": "bin/cli.js",
   "bugs": {
     "url": "https://github.com/cariad/groggy-cli/issues"
   },

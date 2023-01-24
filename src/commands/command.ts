@@ -1,10 +1,10 @@
 import ICommand from '../interfaces/command.js';
-import ProjectModel from '../models/project.js';
+import IProject from '../interfaces/project.js';
 
 export default abstract class Command implements ICommand {
-  public readonly project: ProjectModel;
+  public readonly project: IProject;
 
-  constructor(project: ProjectModel) {
+  constructor(project: IProject) {
     this.project = project;
   }
 
