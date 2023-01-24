@@ -1,33 +1,25 @@
 import path from 'path';
 
-import ProjectModel from './project';
+import Project from './project';
 
-const model = new ProjectModel('demo');
-const textureSets = path.join('demo', 'texture-sets');
+const project = new Project('demo');
 
-test('forEachFile finds all files', async () => {
-  const found: string[] = [];
-
-  await ProjectModel.forEachFile(textureSets, (f) => found.push(f));
-
-  expect(found).toEqual([
-    'demo/texture-sets/demo.json',
-    'demo/texture-sets/demo.png',
-  ]);
+test('resolves the project path', () => {
+  expect(path.isAbsolute(project.path)).toBeTruthy();
 });
 
-test('forEachJson finds all files', async () => {
-  const found: string[] = [];
-
-  await ProjectModel.forEachJson(textureSets, (f) => found.push(f));
-
-  expect(found).toEqual(['demo/texture-sets/demo.json']);
+test('getAllFiles finds all files', () => {
+  const found = project.getAllFiles('texture-sets');
+  expect(found).toEqual(['demo.json', 'demo.png']);
 });
 
-test('forEachTextureSet finds all texture sets', async () => {
+test('getAllJsonNames finds all JSON file names', () => {
+  const found = project.getAllJsonNames('texture-sets');
+  expect(found).toEqual(['demo']);
+});
+
+test('forEachTextureSet finds all texture sets', () => {
   const found: string[] = [];
-
-  await model.forEachTextureSet((ts) => found.push(ts.name));
-
+  project.forEachTextureSet((ts) => found.push(ts.name));
   expect(found).toEqual(['demo']);
 });

@@ -20,5 +20,7 @@ module.exports = {
   rules: {
     'no-console': 0,
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'object-curly-newline': 0,
+    'operator-linebreak': 0,
   },
 };

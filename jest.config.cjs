@@ -3,7 +3,7 @@ module.exports = {
   collectCoverageFrom: ['./src/**'],
   coverageThreshold: {
     global: {
-      lines: 67,
+      statements: 86,
     },
   },
   preset: 'ts-jest',
