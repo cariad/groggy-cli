@@ -1,4 +1,4 @@
-import ITextureSetSchema from './texture-set-schema';
+import ITextureSetSchema from './schemas/texture-set';
 import Rectangle from '../types/rectangle';
 
 export default interface ITextureSet {

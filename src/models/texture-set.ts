@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import ITextureSet from '../interfaces/texture-set.js';
-import ITextureSetSchema from '../interfaces/texture-set-schema.js';
+import ITextureSetSchema from '../interfaces/schemas/texture-set.js';
 import Project from './project.js';
 import Rectangle from '../types/rectangle.js';
 
