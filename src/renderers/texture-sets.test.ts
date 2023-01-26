@@ -3,7 +3,7 @@ import TextureSet from '../models/texture-set';
 import TextureSetRenderer from './texture-set';
 import MockCanvasBuilder from '../testing/mock-canvas-builder';
 
-const project = new Project('demo');
+const project = Project.load('demo');
 const textureSet = TextureSet.load('demo', project);
 
 test('constructor creates a canvas', () => {

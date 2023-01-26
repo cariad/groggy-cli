@@ -2,7 +2,7 @@ import MockCanvasBuilder from '../testing/mock-canvas-builder';
 import Project from '../models/project';
 import RenderTextureSetsCommand from './render-texture-sets';
 
-const project = new Project('demo');
+const project = Project.load('demo');
 
 test('invoke creates and exports an image', async () => {
   const [makeCanvasBuilder, canvasBuilder] = MockCanvasBuilder.prepare();

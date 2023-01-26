@@ -2,16 +2,29 @@ import fs from 'fs';
 import path from 'path';
 
 import IProject from '../interfaces/project.js';
+import IProjectSchema from '../interfaces/schemas/project.js';
 import TextureSet from './texture-set.js';
 import TextureSetCallback from '../types/texture-set-callback.js';
 
 export default class Project implements IProject {
+  public readonly data: IProjectSchema;
+
   public readonly path: string;
 
   private static readonly TEXTURE_SETS_DIR = 'texture-sets';
 
-  constructor(projectPath: string) {
-    this.path = path.resolve(projectPath);
+  constructor(data: IProjectSchema, projectPath: string) {
+    this.data = data;
+    this.path = projectPath;
+  }
+
+  public static load(directory: string): Project {
+    const projectDir = path.resolve(directory);
+    const file = path.join(projectDir, 'project.json');
+    const buffer = fs.readFileSync(file);
+    const s = buffer.toString();
+    const data = JSON.parse(s) as IProjectSchema;
+    return new Project(data, projectDir);
   }
 
   public get textureSetsPath(): string {

@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+import IProject from '../interfaces/project.js';
 import ITextureSet from '../interfaces/texture-set.js';
 import ITextureSetSchema from '../interfaces/schemas/texture-set.js';
-import Project from './project.js';
 import Rectangle from '../types/rectangle.js';
 
 /**
@@ -14,9 +14,9 @@ export default class TextureSet implements ITextureSet {
 
   public readonly name: string;
 
-  public readonly project: Project;
+  public readonly project: IProject;
 
-  constructor(data: ITextureSetSchema, name: string, project: Project) {
+  constructor(data: ITextureSetSchema, name: string, project: IProject) {
     this.data = data;
     this.name = name;
     this.project = project;
@@ -33,20 +33,14 @@ export default class TextureSet implements ITextureSet {
   public getTextureSource(name: string): Rectangle {
     const texture = this.data.textures[name];
     return [
-      texture[0] * this.data.grid,
-      texture[1] * this.data.grid,
-      this.data.grid,
-      this.data.grid,
+      texture[0] * this.project.data.grid,
+      texture[1] * this.project.data.grid,
+      this.project.data.grid,
+      this.project.data.grid,
     ];
   }
 
-  /**
-   * Loads a texture set from the local filesystem.
-   *
-   * @param name Name of the texture set to load
-   * @returns Texture set
-   */
-  public static load(name: string, project: Project): TextureSet {
+  public static load(name: string, project: IProject): TextureSet {
     const file = path.join(project.textureSetsPath, `${name}.json`);
     const buffer = fs.readFileSync(file);
     const s = buffer.toString();
