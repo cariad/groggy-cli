@@ -6,7 +6,7 @@ export default class CommandBuilder {
   private readonly project: Project;
 
   constructor(projectPath: string) {
-    this.project = new Project(projectPath);
+    this.project = Project.load(projectPath);
   }
 
   public renderTextureSets(): RenderTextureSetsCommand {

@@ -1,5 +1,4 @@
 {
-  "grid": 16,
   "surface": [0, 0, 1, 6],
   "textures": [
     { "cell": [0, 0], "textureSet": "demo", "texture": "WallTop" },

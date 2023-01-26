@@ -3,7 +3,7 @@ import path from 'path';
 import Project from './project';
 import TextureSet from './texture-set';
 
-const textureSet = TextureSet.load('demo', new Project('demo'));
+const textureSet = TextureSet.load('demo', Project.load('demo'));
 
 test('imagePath is correct', () => {
   const expected = path.join(path.resolve('demo'), 'texture-sets', 'demo.png');

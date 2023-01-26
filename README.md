@@ -9,13 +9,24 @@ A CLI for managing Groggy game engine assets.
 A Groggy project is a directory that contains the following files:
 
 ```text
+/project.json
 /texture-sets/<texture set name>.json
 /texture-sets/<texture set name>.png
 ```
 
 An example project is available at [github.com/cariad/groggy-cli/demo](https://github.com/cariad/groggy-cli/tree/main/demo).
 
-### Texture sets
+### `/project.json`
+
+```json
+{
+  "grid": 16
+}
+```
+
+- `grid`: the width and height of each texture in pixels.
+
+### `/texture-sets/`
 
 A _texture set_ is a pairing of:
 
@@ -28,19 +39,15 @@ The JSON schema is:
 
 ```json
 {
-  "grid": 16, // Width and height of each texture in pixels
   "textures": {
-    // The name of each texture and its (x,y) coordinate in textures
-    // (not pixels).
-    // For example, the "Wall" texture is at the top left:
     "Wall": [0, 0],
-    // ...the "WallTop" texture is one texture to the right:
     "WallTop": [1, 0],
-    // ...and the "FloorLeft" texture is two textures to the right:
     "FloorLeft": [2, 0]
   }
 }
 ```
+
+- `textures`: the name and grid coordinates of each texture within the source image. For example, the second texture from the right on the top row is "WallTop".
 
 ## Commands
 

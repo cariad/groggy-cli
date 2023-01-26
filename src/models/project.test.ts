@@ -2,7 +2,7 @@ import path from 'path';
 
 import Project from './project';
 
-const project = new Project('demo');
+const project = Project.load('demo');
 
 test('resolves the project path', () => {
   expect(path.isAbsolute(project.path)).toBeTruthy();
