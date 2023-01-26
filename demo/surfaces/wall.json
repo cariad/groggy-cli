@@ -1,0 +1,12 @@
+{
+  "grid": 16,
+  "surface": [0, 0, 1, 6],
+  "textures": [
+    { "cell": [0, 0], "textureSet": "demo", "texture": "WallTop" },
+    { "cell": [0, 1], "textureSet": "demo", "texture": "Wall" },
+    { "cell": [0, 2], "textureSet": "demo", "texture": "Wall" },
+    { "cell": [0, 3], "textureSet": "demo", "texture": "Wall" },
+    { "cell": [0, 4], "textureSet": "demo", "texture": "Wall" },
+    { "cell": [0, 5], "textureSet": "demo", "texture": "Wall" }
+  ]
+}
