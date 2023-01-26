@@ -18,10 +18,17 @@ class MockCommand implements ICommand {
 }
 
 class MockCommandBuilder implements ICommandBuilder {
+  public readonly renderSurfacesCommand: MockCommand;
+
   public readonly renderTextureSetsCommand: MockCommand;
 
   constructor() {
+    this.renderSurfacesCommand = new MockCommand();
     this.renderTextureSetsCommand = new MockCommand();
+  }
+
+  public renderSurfaces(): ICommand {
+    return this.renderSurfacesCommand;
   }
 
   public renderTextureSets(): ICommand {
@@ -34,6 +41,15 @@ function prepare(): [MakeCommandBuilder, MockCommandBuilder] {
   const makeCommandBuilder = jest.fn(() => commandBuilder);
   return [makeCommandBuilder, commandBuilder];
 }
+
+test('renders surfaces', () => {
+  const [makeCommandBuilder, commandBuilder] = prepare();
+
+  entry(['', '', 'render-surfaces', '--project', 'foo'], makeCommandBuilder);
+
+  expect(makeCommandBuilder).toBeCalledWith('foo');
+  expect(commandBuilder.renderSurfacesCommand.invokeMock).toBeCalled();
+});
 
 test('renders texture sets', () => {
   const [makeCommandBuilder, commandBuilder] = prepare();
