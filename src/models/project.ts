@@ -3,6 +3,8 @@ import path from 'path';
 
 import IProject from '../interfaces/project.js';
 import IProjectSchema from '../interfaces/schemas/project.js';
+import Surface from './surface.js';
+import SurfaceCallback from '../types/surface-callback.js';
 import TextureSet from './texture-set.js';
 import TextureSetCallback from '../types/texture-set-callback.js';
 
@@ -10,6 +12,10 @@ export default class Project implements IProject {
   public readonly data: IProjectSchema;
 
   public readonly path: string;
+
+  private static readonly RENDERS_DIR = 'renders';
+
+  private static readonly SURFACES_DIR = 'surfaces';
 
   private static readonly TEXTURE_SETS_DIR = 'texture-sets';
 
@@ -27,6 +33,14 @@ export default class Project implements IProject {
     return new Project(data, projectDir);
   }
 
+  public get rendersPath(): string {
+    return path.join(this.path, Project.RENDERS_DIR);
+  }
+
+  public get surfacesPath(): string {
+    return path.join(this.path, Project.SURFACES_DIR);
+  }
+
   public get textureSetsPath(): string {
     return path.join(this.path, Project.TEXTURE_SETS_DIR);
   }
@@ -40,6 +54,15 @@ export default class Project implements IProject {
     return this.getAllFiles(subdirectory)
       .filter((f) => f.toLowerCase().endsWith('.json'))
       .map((f) => f.substring(0, f.length - '.json'.length));
+  }
+
+  public forEachSurface(cb: SurfaceCallback): void {
+    const names = this.getAllJsonNames(Project.SURFACES_DIR);
+
+    names.forEach((name) => {
+      const surface = Surface.load(name, this);
+      cb(surface);
+    });
   }
 
   public forEachTextureSet(cb: TextureSetCallback): void {

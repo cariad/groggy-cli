@@ -1,5 +1,3 @@
-import path from 'path';
-
 import Command from './command.js';
 import IProject from '../interfaces/project.js';
 import MakeCanvasBuilder from '../types/make-canvas-builder.js';
@@ -18,8 +16,7 @@ export default class RenderTextureSetsCommand extends Command {
 
     this.project.forEachTextureSet((ts) => {
       const renderer = new TextureSetRenderer(ts, this.makeCanvasBuilder);
-      const dir = path.join(this.project.path, 'renders');
-      const render = renderer.render(dir);
+      const render = renderer.render(this.project.rendersPath);
       promises.push(render);
     });
 
