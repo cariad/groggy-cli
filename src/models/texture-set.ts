@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { Image, loadImage } from 'canvas';
 
 import IProject from '../interfaces/project.js';
 import ITextureSet from '../interfaces/texture-set.js';
@@ -16,18 +15,26 @@ export default class TextureSet implements ITextureSet {
 
   public readonly project: IProject;
 
+  private image: Image | undefined;
+
   constructor(data: ITextureSetSchema, name: string, project: IProject) {
     this.data = data;
+    this.image = undefined;
     this.name = name;
     this.project = project;
   }
 
-  public get imagePath(): string {
-    return path.join(this.project.textureSetsPath, `${this.name}.png`);
-  }
-
   public get textureCount(): number {
     return Object.keys(this.data.textures).length;
+  }
+
+  public async getImage(): Promise<Image> {
+    if (this.image === undefined) {
+      const imagePath = this.project.getTextureSetImageFilename(this.name);
+      this.image = await loadImage(imagePath);
+    }
+
+    return this.image;
   }
 
   public getTextureSource(name: string): Rectangle {
@@ -38,13 +45,5 @@ export default class TextureSet implements ITextureSet {
       this.project.data.grid,
       this.project.data.grid,
     ];
-  }
-
-  public static load(name: string, project: IProject): TextureSet {
-    const file = path.join(project.textureSetsPath, `${name}.json`);
-    const buffer = fs.readFileSync(file);
-    const s = buffer.toString();
-    const data = JSON.parse(s) as ITextureSetSchema;
-    return new TextureSet(data, name, project);
   }
 }

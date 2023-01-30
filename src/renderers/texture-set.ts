@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Image, loadImage } from 'canvas';
+import { Image } from 'canvas';
 
 import ICanvasBuilder from '../interfaces/canvas-builder.js';
 import ITextureSet from '../interfaces/texture-set.js';
@@ -35,7 +35,7 @@ export default class TextureSetRenderer {
   }
 
   public async render(dir: string): Promise<void> {
-    const image = await loadImage(this.ts.imagePath);
+    const image = await this.ts.getImage();
 
     this.canvasBuilder.drawText(`"${this.ts.name}" texture set`, [
       TextureSetRenderer.IMAGE_MARGIN,
