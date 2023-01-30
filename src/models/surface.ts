@@ -22,4 +22,16 @@ export default class Surface implements ISurface {
     const data = JSON.parse(s) as ISurfaceSchema;
     return new Surface(data, name);
   }
+
+  public get size(): [number, number] {
+    let width = this.data.surface[0] + this.data.surface[2];
+    let height = this.data.surface[1] + this.data.surface[3];
+
+    this.data.textures.forEach((t) => {
+      width = Math.max(width, t.cell[0]);
+      height = Math.max(height, t.cell[1]);
+    });
+
+    return [width, height];
+  }
 }
