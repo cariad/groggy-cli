@@ -1,12 +1,12 @@
 import { Image } from 'canvas';
 
-import Point from '../types/point';
 import Rectangle from '../types/rectangle';
+import Vector from '../types/vector';
 
 export default interface ICanvasBuilder {
-  drawImage(image: Image, source: Rectangle, at: Point): ICanvasBuilder;
+  drawImage(image: Image, source: Rectangle, at: Vector): ICanvasBuilder;
 
-  drawText(text: string, at: Point): ICanvasBuilder;
+  drawText(text: string, at: Vector): ICanvasBuilder;
 
   export(to: string): ICanvasBuilder;
 

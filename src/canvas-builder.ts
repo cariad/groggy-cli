@@ -3,8 +3,8 @@ import fs from 'fs';
 import { Canvas, CanvasRenderingContext2D, Image, createCanvas } from 'canvas';
 
 import ICanvasBuilder from './interfaces/canvas-builder';
-import Point from './types/point';
 import Rectangle from './types/rectangle';
+import Vector from './types/vector';
 
 export default class CanvasBuilder implements ICanvasBuilder {
   private readonly canvas: Canvas;
@@ -24,13 +24,13 @@ export default class CanvasBuilder implements ICanvasBuilder {
   drawImage(
     image: Image,
     [sx, sy, sw, sh]: Rectangle,
-    [tx, ty]: Point,
+    [tx, ty]: Vector,
   ): CanvasBuilder {
     this.ctx.drawImage(image, sx, sy, sw, sh, tx, ty, sw, sh);
     return this;
   }
 
-  public drawText(text: string, [x, y]: Point): CanvasBuilder {
+  public drawText(text: string, [x, y]: Vector): CanvasBuilder {
     this.ctx.fillText(text, x, y);
     return this;
   }

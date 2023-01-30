@@ -4,6 +4,7 @@ import path from 'path';
 import IProject from '../interfaces/project.js';
 import ISurface from '../interfaces/surface.js';
 import ISurfaceSchema from '../interfaces/schemas/surface.js';
+import Vector from '../types/vector.js';
 
 export default class Surface implements ISurface {
   public readonly data: ISurfaceSchema;
@@ -23,7 +24,7 @@ export default class Surface implements ISurface {
     return new Surface(data, name);
   }
 
-  public get size(): [number, number] {
+  public get size(): Vector {
     let width = this.data.surface[0] + this.data.surface[2];
     let height = this.data.surface[1] + this.data.surface[3];
 
