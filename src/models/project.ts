@@ -5,8 +5,6 @@ import IProject from '../interfaces/project.js';
 import IProjectSchema from '../interfaces/schemas/project.js';
 import Surface from './surface.js';
 import SurfaceCallback from '../types/surface-callback.js';
-import TextureSet from './texture-set.js';
-import TextureSetCallback from '../types/texture-set-callback.js';
 
 export default class Project implements IProject {
   public readonly data: IProjectSchema;
@@ -41,10 +39,6 @@ export default class Project implements IProject {
     return path.join(this.path, Project.SURFACES_DIR);
   }
 
-  public get textureSetsPath(): string {
-    return path.join(this.path, Project.TEXTURE_SETS_DIR);
-  }
-
   public getAllFiles(subdirectory: string): string[] {
     const dir = path.join(this.path, subdirectory);
     return fs.readdirSync(dir);
@@ -65,12 +59,15 @@ export default class Project implements IProject {
     });
   }
 
-  public forEachTextureSet(cb: TextureSetCallback): void {
-    const names = this.getAllJsonNames(Project.TEXTURE_SETS_DIR);
+  public getTextureSets(): string[] {
+    return this.getAllJsonNames(Project.TEXTURE_SETS_DIR);
+  }
 
-    names.forEach((name) => {
-      const textureSet = TextureSet.load(name, this);
-      cb(textureSet);
-    });
+  public getTextureSetDataFilename(name: string): string {
+    return path.join(this.path, Project.TEXTURE_SETS_DIR, `${name}.json`);
+  }
+
+  public getTextureSetImageFilename(name: string): string {
+    return path.join(this.path, Project.TEXTURE_SETS_DIR, `${name}.png`);
   }
 }
