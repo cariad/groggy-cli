@@ -1,25 +1,26 @@
+import { ICanvasBuilder, ICanvasPainter } from 'canvasbuilder';
+
 import Command from './command.js';
 import IProject from '../interfaces/project.js';
-import MakeCanvasBuilder from '../types/make-canvas-builder.js';
 import TextureSets from '../models/texture-sets.js';
 import TextureSetRenderer from '../renderers/texture-set.js';
 
 export default class RenderTextureSetsCommand extends Command {
-  private readonly makeCanvasBuilder: MakeCanvasBuilder;
+  private readonly canvasBuilder: ICanvasBuilder;
 
-  constructor(project: IProject, makeCanvasBuilder: MakeCanvasBuilder) {
+  constructor(project: IProject, canvasBuilder: ICanvasBuilder) {
     super(project);
-    this.makeCanvasBuilder = makeCanvasBuilder;
+    this.canvasBuilder = canvasBuilder;
   }
 
   public async invoke(): Promise<void> {
-    const promises: Promise<void>[] = [];
+    const promises: Promise<ICanvasPainter>[] = [];
 
     const textureSets = new TextureSets(this.project);
 
     this.project.getTextureSets().forEach((name) => {
       const ts = textureSets.get(name);
-      const renderer = new TextureSetRenderer(ts, this.makeCanvasBuilder);
+      const renderer = new TextureSetRenderer(ts, this.canvasBuilder);
       const render = renderer.render(this.project.rendersPath);
       promises.push(render);
     });

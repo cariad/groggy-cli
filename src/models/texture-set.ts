@@ -1,9 +1,11 @@
 import { Image, loadImage } from 'canvas';
+import { ICanvasPainter } from 'canvasbuilder';
 
 import IProject from '../interfaces/project.js';
 import ITextureSet from '../interfaces/texture-set.js';
 import ITextureSetSchema from '../interfaces/schemas/texture-set.js';
 import Rectangle from '../types/rectangle.js';
+import Vector from '../types/vector.js';
 
 /**
  * A set of textures from a single image file.
@@ -15,7 +17,7 @@ export default class TextureSet implements ITextureSet {
 
   public readonly project: IProject;
 
-  private image: Image | undefined;
+  private image: Promise<Image> | undefined;
 
   constructor(data: ITextureSetSchema, name: string, project: IProject) {
     this.data = data;
@@ -28,10 +30,17 @@ export default class TextureSet implements ITextureSet {
     return Object.keys(this.data.textures).length;
   }
 
-  public async getImage(): Promise<Image> {
+  public draw(name: string, at: Vector, on: ICanvasPainter): void {
+    const image = this.getImage();
+    const source = this.getTextureSource(name);
+    on.drawImage(image, at, source);
+  }
+
+  public getImage(): Promise<Image> {
     if (this.image === undefined) {
       const imagePath = this.project.getTextureSetImageFilename(this.name);
-      this.image = await loadImage(imagePath);
+      console.info(`Loading image: ${imagePath}`);
+      this.image = loadImage(imagePath);
     }
 
     return this.image;

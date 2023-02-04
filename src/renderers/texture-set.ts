@@ -1,11 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Image } from 'canvas';
+import { ICanvasBuilder, ICanvasPainter } from 'canvasbuilder';
 
-import ICanvasBuilder from '../interfaces/canvas-builder.js';
 import ITextureSet from '../interfaces/texture-set.js';
-import MakeCanvasBuilder from '../types/make-canvas-builder.js';
 
 export default class TextureSetRenderer {
   public static readonly IMAGE_MARGIN = 10;
@@ -17,27 +15,30 @@ export default class TextureSetRenderer {
   // TODO: This assumes a tile size of 16.
   public static readonly TEXTURE_ROW_HEIGHT = 30;
 
-  private readonly canvasBuilder: ICanvasBuilder;
+  private readonly canvasPainter: ICanvasPainter;
 
   private readonly ts: ITextureSet;
 
-  constructor(ts: ITextureSet, makeCanvasBuilder: MakeCanvasBuilder) {
+  constructor(ts: ITextureSet, canvasBuilder: ICanvasBuilder) {
     let height = TextureSetRenderer.IMAGE_MARGIN;
     height += TextureSetRenderer.TEXT_SIZE;
     height += TextureSetRenderer.TEXT_MARGIN;
     height += ts.textureCount * TextureSetRenderer.TEXTURE_ROW_HEIGHT;
     height += TextureSetRenderer.IMAGE_MARGIN;
 
-    this.canvasBuilder = makeCanvasBuilder(150, height);
-    this.canvasBuilder.setFontSize(TextureSetRenderer.TEXT_SIZE);
+    this.canvasPainter = canvasBuilder
+      .setSize(150, height)
+      .build()
+      .clear('white')
+      .setFontSize(TextureSetRenderer.TEXT_SIZE);
 
     this.ts = ts;
   }
 
-  public async render(dir: string): Promise<void> {
-    const image = await this.ts.getImage();
+  public render(dir: string): Promise<ICanvasPainter> {
+    const image = this.ts.getImage();
 
-    this.canvasBuilder.drawText(`"${this.ts.name}" texture set`, [
+    this.canvasPainter.fillText(`"${this.ts.name}" texture set`, [
       TextureSetRenderer.IMAGE_MARGIN,
       TextureSetRenderer.IMAGE_MARGIN + TextureSetRenderer.TEXT_SIZE,
     ]);
@@ -50,27 +51,20 @@ export default class TextureSetRenderer {
     ];
 
     Object.keys(this.ts.data.textures).forEach((name) => {
-      this.renderTexture(name, image, renderAt);
+      const source = this.ts.getTextureSource(name);
+
+      this.canvasPainter.drawImage(image, renderAt, source);
+
+      this.canvasPainter.fillText(name, [
+        renderAt[0] + source[2] + 10,
+        renderAt[1] + TextureSetRenderer.TEXTURE_ROW_HEIGHT / 2,
+      ]);
+
       renderAt[1] += TextureSetRenderer.TEXTURE_ROW_HEIGHT;
     });
 
     const renderPath = path.join(dir, `${this.ts.name}.texture-set.png`);
-    console.info(`Exporting texture set "${this.ts.name}": ${renderPath}`);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    this.canvasBuilder.export(renderPath);
-  }
-
-  private renderTexture(
-    name: string,
-    image: Image,
-    at: [number, number],
-  ): void {
-    const source = this.ts.getTextureSource(name);
-    this.canvasBuilder.drawImage(image, source, at);
-
-    this.canvasBuilder.drawText(name, [
-      at[0] + source[2] + 10,
-      at[1] + TextureSetRenderer.TEXTURE_ROW_HEIGHT / 2,
-    ]);
+    return this.canvasPainter.export(renderPath);
   }
 }

@@ -1,14 +1,32 @@
 import { CanvasBuilder } from 'canvasbuilder';
 import Project from '../models/project';
-import RenderTextureSetsCommand from './render-texture-sets';
+import TextureSets from '../models/texture-sets';
+import TextureSetRenderer from './texture-set';
 
 const project = Project.load('demo');
+const textureSets = new TextureSets(project);
+const textureSet = textureSets.get('demo');
 
-test('invoke creates and exports an image', async () => {
+test('constructor creates a canvas', () => {
   const canvasBuilder = new CanvasBuilder();
 
-  const command = new RenderTextureSetsCommand(project, canvasBuilder);
-  await command.invoke();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const renderer = new TextureSetRenderer(textureSet, canvasBuilder);
+
+  expect(canvasBuilder.events).toEqual([
+    {
+      function: 'setSize',
+      height: 204,
+      width: 150,
+    },
+  ]);
+});
+
+test('render creates and exports an image', async () => {
+  const canvasBuilder = new CanvasBuilder();
+
+  const renderer = new TextureSetRenderer(textureSet, canvasBuilder);
+  await renderer.render(project.rendersPath);
 
   expect(canvasBuilder.events).toEqual([
     {
