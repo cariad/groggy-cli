@@ -1,5 +1,4 @@
 {
-  "grid": 16,
   "textures": {
     "Wall": [0, 0],
     "WallTop": [1, 0],

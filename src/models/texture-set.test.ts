@@ -1,14 +1,9 @@
-import path from 'path';
-
 import Project from './project';
-import TextureSet from './texture-set';
+import TextureSets from './texture-sets';
 
-const textureSet = TextureSet.load('demo', Project.load('demo'));
-
-test('imagePath is correct', () => {
-  const expected = path.join(path.resolve('demo'), 'texture-sets', 'demo.png');
-  expect(textureSet.imagePath).toBe(expected);
-});
+const project = Project.load('demo');
+const textureSets = new TextureSets(project);
+const textureSet = textureSets.get('demo');
 
 test('textureCount is correct', () => {
   expect(textureSet.textureCount).toBe(5);

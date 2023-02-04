@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import CommandBuilder from '../dist/command-builder.js';
-import entry from '../dist/main.js';
+const CommandBuilder = require('../dist/command-builder.js').default;
+const entry = require('../dist/main.js').default;
 
-entry(process.argv, (projectPath) => new CommandBuilder(projectPath));
+entry(process.argv, (projectPath) => new CommandBuilder(projectPath, true));

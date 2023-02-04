@@ -1,7 +1,7 @@
-import Point from '../../types/point';
+import Vector from '../../types/vector';
 
 export default interface ITextureTargetSchema {
-  cell: Point;
+  cell: Vector;
   textureSet: string;
   texture: string;
 }

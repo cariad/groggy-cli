@@ -3,10 +3,6 @@ import path from 'path';
 
 import IProject from '../interfaces/project.js';
 import IProjectSchema from '../interfaces/schemas/project.js';
-import Surface from './surface.js';
-import SurfaceCallback from '../types/surface-callback.js';
-import TextureSet from './texture-set.js';
-import TextureSetCallback from '../types/texture-set-callback.js';
 
 export default class Project implements IProject {
   public readonly data: IProjectSchema;
@@ -25,12 +21,11 @@ export default class Project implements IProject {
   }
 
   public static load(directory: string): Project {
-    const projectDir = path.resolve(directory);
-    const file = path.join(projectDir, 'project.json');
+    const file = path.join(directory, 'project.json');
     const buffer = fs.readFileSync(file);
     const s = buffer.toString();
     const data = JSON.parse(s) as IProjectSchema;
-    return new Project(data, projectDir);
+    return new Project(data, directory);
   }
 
   public get rendersPath(): string {
@@ -39,10 +34,6 @@ export default class Project implements IProject {
 
   public get surfacesPath(): string {
     return path.join(this.path, Project.SURFACES_DIR);
-  }
-
-  public get textureSetsPath(): string {
-    return path.join(this.path, Project.TEXTURE_SETS_DIR);
   }
 
   public getAllFiles(subdirectory: string): string[] {
@@ -56,21 +47,23 @@ export default class Project implements IProject {
       .map((f) => f.substring(0, f.length - '.json'.length));
   }
 
-  public forEachSurface(cb: SurfaceCallback): void {
-    const names = this.getAllJsonNames(Project.SURFACES_DIR);
-
-    names.forEach((name) => {
-      const surface = Surface.load(name, this);
-      cb(surface);
-    });
+  public getSurfaces(): string[] {
+    return this.getAllJsonNames(Project.SURFACES_DIR);
   }
 
-  public forEachTextureSet(cb: TextureSetCallback): void {
-    const names = this.getAllJsonNames(Project.TEXTURE_SETS_DIR);
+  public getSurfaceDataFilename(name: string): string {
+    return path.join(this.path, Project.SURFACES_DIR, `${name}.json`);
+  }
 
-    names.forEach((name) => {
-      const textureSet = TextureSet.load(name, this);
-      cb(textureSet);
-    });
+  public getTextureSets(): string[] {
+    return this.getAllJsonNames(Project.TEXTURE_SETS_DIR);
+  }
+
+  public getTextureSetDataFilename(name: string): string {
+    return path.join(this.path, Project.TEXTURE_SETS_DIR, `${name}.json`);
+  }
+
+  public getTextureSetImageFilename(name: string): string {
+    return path.join(this.path, Project.TEXTURE_SETS_DIR, `${name}.png`);
   }
 }
